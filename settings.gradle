@@ -12,6 +12,18 @@ dependencyResolutionManagement {
         mavenCentral()
         maven { url 'https://jitpack.io' }
     }
+
+    versionCatalogs {
+        libs {
+            from(files("./libs.versions.toml"))
+        }
+    }
 }
+
 rootProject.name = "TTS Server"
 include ':app'
+//include ':lib-tts'
+//include ':lib-script-engine'
+//include ':lib-common'
+//include ':lib-gojni'
+//include ':core'

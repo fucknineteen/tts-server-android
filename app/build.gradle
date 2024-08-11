@@ -2,7 +2,6 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlinx-serialization")
-    id("kotlin-kapt")
     id("kotlin-parcelize")
     id("com.google.devtools.ksp")
     id("com.mikepenz.aboutlibraries.plugin")
@@ -21,12 +20,12 @@ def version = "1." + releaseTime()
 def gitCommits = Integer.parseInt('git rev-list HEAD --count'.execute().text.trim())
 
 android {
-    compileSdk 34
+    compileSdk libs.versions.compileSdk.get().toInteger()
     namespace 'com.github.jing332.tts_server_android'
     defaultConfig {
         applicationId 'com.github.jing332.tts_server_android'
-        minSdk 21
-        targetSdk 34
+        minSdk libs.versions.minSdk.get().toInteger()
+        targetSdk libs.versions.targetSdk.get().toInteger()
         versionCode gitCommits
         versionName version
 
@@ -158,108 +157,67 @@ android {
 
     buildFeatures {
         viewBinding true
-        dataBinding true
-
-        compose true
         buildConfig true
+        compose true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "$compose_compiler"
+        kotlinCompilerExtensionVersion = libs.versions.composeComplile.get()
     }
 }
 
 dependencies {
-    implementation 'androidx.activity:activity-ktx:1.9.0'
-    coreLibraryDesugaring('com.android.tools:desugar_jdk_libs:2.0.4')
+//    implementation(project(":core"))
+    coreLibraryDesugaring(libs.desugar)
 
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
-    implementation 'androidx.core:core-ktx:1.13.1'
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation libs.activityKtx
+    implementation libs.bundles.andorid.base
+//    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
-    //noinspection GradleDependency
-    implementation 'com.google.android.material:material:1.9.0-beta01'
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0'
+    implementation libs.kotlinx.coroutines.android
+    implementation libs.kotlinx.serialization.json
 
-    def markwon_version = '4.6.2'
-    implementation "com.caverock:androidsvg:1.4"
-    implementation "io.noties.markwon:core:$markwon_version"
-    implementation "io.noties.markwon:image:$markwon_version"
-//    implementation "io.noties.markwon:html:$markwon_version"
-    implementation "io.noties.markwon:linkify:$markwon_version"
-
-    // RecyclerView
-    implementation 'com.github.liangjingkanji:BRV:1.5.8'
-    implementation "androidx.recyclerview:recyclerview:1.3.2"
-    implementation 'me.zhanghai.android.fastscroll:library:1.2.0'
+    implementation(libs.bundles.markwon)
+    implementation(libs.bundles.ui)
 
     // Code Editor
-    implementation 'io.github.Rosemoe.sora-editor:editor:0.21.1'
-    implementation 'io.github.Rosemoe.sora-editor:language-textmate:0.21.1'
+    implementation(libs.bundles.codeEditor)
+    implementation(libs.bundles.network)
 
-    // Room
-    ksp("androidx.room:room-compiler:$room_version")
-    implementation("androidx.room:room-runtime:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
-    androidTestImplementation("androidx.room:room-testing:$room_version")
 
-    // IO & NET
-    implementation 'com.squareup.okio:okio:3.3.0'
-    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
-    implementation 'com.github.liangjingkanji:Net:3.6.4'
+    implementation(libs.bundles.room)
+    ksp(libs.roomCompiler)
+
+
+    implementation(libs.splitties.systemservices)
+    implementation(libs.splitties.appctx)
+    implementation(libs.hutool.crypto)
+
+
+    implementation(libs.bundles.media3)
 
     implementation 'me.rosuh:AndroidFilePicker:1.0.1'
-    implementation 'com.louiscad.splitties:splitties-systemservices:3.0.0'
-
-    implementation 'cn.hutool:hutool-crypto:5.8.19'
-
     implementation("com.hankcs:hanlp:portable-1.8.4")
-
-    // Media
-    implementation("androidx.media3:media3-exoplayer:1.3.1")
-    implementation("androidx.media3:media3-ui:1.3.1")
 
     // https://github.com/gyf-dev/ImmersionBar
     implementation 'com.geyifeng.immersionbar:immersionbar:3.2.2'
     implementation 'com.geyifeng.immersionbar:immersionbar-ktx:3.2.2'
 
-    // https://github.com/FunnySaltyFish/ComposeDataSaver
-    implementation "com.github.FunnySaltyFish.ComposeDataSaver:data-saver:v1.1.5"
 
-    implementation("com.mikepenz:aboutlibraries-core:${about_lib_version}")
-    implementation("com.mikepenz:aboutlibraries-compose:${about_lib_version}")
+    implementation(libs.bundles.about)
 
-    def accompanistVersion = "0.33.0-alpha"
-    implementation("com.google.accompanist:accompanist-systemuicontroller:${accompanistVersion}")
-    implementation("com.google.accompanist:accompanist-navigation-animation:${accompanistVersion}")
-    implementation("com.google.accompanist:accompanist-webview:${accompanistVersion}")
-    implementation("com.google.accompanist:accompanist-permissions:${accompanistVersion}")
-
-
-
-    implementation("org.burnoutcrew.composereorderable:reorderable:0.9.6")
-
-    implementation 'androidx.activity:activity-compose:1.9.0'
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
-    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation libs.bundles.accompanist
 
     implementation("io.github.dokar3:sheets-m3:0.5.4")
 
+    implementation(libs.bundles.lifecycle)
+    implementation(libs.bundles.compose)
 
-
-
-    def lifecycle_version = "2.8.2"
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${lifecycle_version}"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${lifecycle_version}"
-
-    def composeBom = platform('androidx.compose:compose-bom:2024.06.00')
+    def composeBom = platform(libs.composeBom)
 //    def composeBom = platform("dev.chrisbanes.compose:compose-bom:2024.01.00-alpha01")
     implementation composeBom
     androidTestImplementation composeBom
@@ -268,9 +226,9 @@ dependencies {
     implementation("androidx.compose.foundation:foundation")
     implementation("androidx.compose.ui:ui")
 
-    implementation 'androidx.compose.material:material-icons-core'
-    implementation 'androidx.compose.material:material-icons-extended'
-    implementation 'androidx.compose.material3:material3-window-size-class'
+    implementation("androidx.compose.material:material-icons-core")
+    implementation("androidx.compose.material:material-icons-extended")
+    implementation("androidx.compose.material3:material3-window-size-class")
 
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
@@ -280,7 +238,7 @@ dependencies {
     // Logcat (Debug)
 //    debugImplementation 'com.github.getActivity:Logcat:11.2'
 
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
 }
