@@ -7,8 +7,8 @@ import com.github.jing332.tts_server_android.bean.EdgeVoiceBean
 import com.github.jing332.tts_server_android.constant.AppConst
 import com.github.jing332.tts_server_android.constant.CnLocalMap
 import com.github.jing332.tts_server_android.constant.MsTtsApiType
+import com.github.jing332.lib_gojni.TtsGoNative
 import com.github.jing332.tts_server_android.utils.FileUtils
-import tts_server_lib.Tts_server_lib
 import java.io.File
 import java.util.*
 
@@ -52,7 +52,7 @@ class MsTtsEditRepository() {
         mDataCacheMap[EDGE_CACHE_PATH]?.let { return it }
 
         val list = getVoicesHelper<EdgeVoiceBean>(EDGE_CACHE_PATH) {
-            Tts_server_lib.getEdgeVoices()
+            TtsGoNative.getEdgeVoices().toByteArray()
         }
 
         return list.map {

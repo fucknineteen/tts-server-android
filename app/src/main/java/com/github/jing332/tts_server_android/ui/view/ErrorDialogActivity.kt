@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.lifecycleScope
 import com.drake.net.utils.withIO
+import com.github.jing332.lib_gojni.NativeUtils
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.theme.AppTheme
 import com.github.jing332.tts_server_android.compose.widgets.AppDialog
@@ -47,13 +48,13 @@ import com.github.jing332.tts_server_android.utils.rootCause
 import com.github.jing332.tts_server_android.utils.toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import tts_server_lib.Tts_server_lib
 import java.util.UUID
 
 @Suppress("DEPRECATION")
 class ErrorDialogActivity : AppCompatActivity() {
     companion object {
-        const val ACTION_FINISH = "com.github.jing332.tts_server_android.ui.view.ErrorDialogActivity.ACTION_FINISH"
+        const val ACTION_FINISH =
+            "com.github.jing332.tts_server_android.ui.view.ErrorDialogActivity.ACTION_FINISH"
 
         const val KEY_T_DATA = "throwable"
         const val KEY_TITLE = "title"
@@ -160,7 +161,7 @@ class ErrorDialogActivity : AppCompatActivity() {
                                         lifecycleScope.launch(Dispatchers.Main) {
                                             isLoading = true
                                             kotlin.runCatching {
-                                                val url = withIO { Tts_server_lib.uploadLog(str) }
+                                                val url = withIO { NativeUtils.uploadLog(str) }
                                                 ClipboardUtils.copyText(url)
                                                 longToast(R.string.copied)
                                             }.onFailure {

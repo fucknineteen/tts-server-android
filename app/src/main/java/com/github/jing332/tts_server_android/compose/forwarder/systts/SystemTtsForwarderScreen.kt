@@ -18,7 +18,7 @@ import com.github.jing332.tts_server_android.compose.forwarder.BasicConfigScreen
 import com.github.jing332.tts_server_android.compose.forwarder.BasicForwarderScreen
 import com.github.jing332.tts_server_android.compose.forwarder.ConfigViewModel
 import com.github.jing332.tts_server_android.compose.forwarder.ForwarderTopAppBar
-import com.github.jing332.tts_server_android.conf.SysttsForwarderConfig
+import com.github.jing332.tts_server_android.conf.SystemTtsForwarderConfig
 import com.github.jing332.tts_server_android.service.forwarder.ForwarderServiceManager.switchSysTtsForwarder
 import com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService
 import com.github.jing332.tts_server_android.ui.forwarder.SystemForwarderSwitchActivity
@@ -27,10 +27,10 @@ import com.github.jing332.tts_server_android.utils.MyTools
 @Composable
 fun SystemTtsForwarderScreen(cfgVM: ConfigViewModel = viewModel()) {
     val context = LocalContext.current
-    var port by remember { SysttsForwarderConfig.port }
+    var port by remember { SystemTtsForwarderConfig.port }
     BasicForwarderScreen(
         topBar = {
-            var wakeLockEnabled by remember { SysttsForwarderConfig.isWakeLockEnabled }
+            var wakeLockEnabled by remember { SystemTtsForwarderConfig.isWakeLockEnabled }
             ForwarderTopAppBar(
                 title = { Text(text = stringResource(id = R.string.forwarder_systts)) },
                 wakeLockEnabled = wakeLockEnabled,

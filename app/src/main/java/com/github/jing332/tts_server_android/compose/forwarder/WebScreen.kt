@@ -124,8 +124,8 @@ internal fun WebScreen(
 
         if (process > 0)
             LinearProgressIndicator(
+                progress = { process },
                 modifier = Modifier.fillMaxWidth(),
-                progress = process
             )
 
         var lastTitle by remember { mutableStateOf("") }
@@ -151,6 +151,8 @@ internal fun WebScreen(
                 navigator = navigator,
                 onCreated = {
                     it.settings.javaScriptEnabled = true
+                    it.settings.domStorageEnabled = true
+                    it.settings.databaseEnabled = true
                 },
                 client = client,
                 chromeClient = chromeClient,

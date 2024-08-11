@@ -167,7 +167,7 @@ android {
 }
 
 dependencies {
-//    implementation(project(":core"))
+    implementation(project(":lib-gojni"))
     coreLibraryDesugaring(libs.desugar)
 
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')

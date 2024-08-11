@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Token
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,31 +23,30 @@ import com.github.jing332.tts_server_android.compose.forwarder.BasicForwarderScr
 import com.github.jing332.tts_server_android.compose.forwarder.ConfigViewModel
 import com.github.jing332.tts_server_android.compose.forwarder.ForwarderTopAppBar
 import com.github.jing332.tts_server_android.compose.widgets.TextFieldDialog
-import com.github.jing332.tts_server_android.conf.MsForwarderConfig
+import com.github.jing332.tts_server_android.conf.MsTtsForwarderConfig
 import com.github.jing332.tts_server_android.service.forwarder.ForwarderServiceManager.switchMsTtsForwarder
 import com.github.jing332.tts_server_android.service.forwarder.ms.MsTtsForwarderService
 import com.github.jing332.tts_server_android.ui.forwarder.MsForwarderSwitchActivity
 import com.github.jing332.tts_server_android.utils.MyTools
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MsTtsForwarderScreen(
     cfgVM: ConfigViewModel = viewModel()
 ) {
     var showTokenDialog by remember { mutableStateOf(false) }
     if (showTokenDialog) {
-        var text by remember { mutableStateOf(MsForwarderConfig.token.value) }
+        var text by remember { mutableStateOf(MsTtsForwarderConfig.token.value) }
         TextFieldDialog(
             title = stringResource(id = R.string.server_set_token),
             text = text,
             onTextChange = { text = it },
             onDismissRequest = { showTokenDialog = false }) {
-            MsForwarderConfig.token.value = text
+            MsTtsForwarderConfig.token.value = text
         }
     }
 
-    var wakeLockEnabled by remember { MsForwarderConfig.isWakeLockEnabled }
-    var port by remember { MsForwarderConfig.port }
+    var wakeLockEnabled by remember { MsTtsForwarderConfig.isWakeLockEnabled }
+    var port by remember { MsTtsForwarderConfig.port }
     val context = LocalContext.current
     BasicForwarderScreen(topBar = {
         ForwarderTopAppBar(

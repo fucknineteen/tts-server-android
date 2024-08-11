@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.about) apply(false)
 }
 
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
