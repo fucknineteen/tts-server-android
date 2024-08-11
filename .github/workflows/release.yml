@@ -25,10 +25,10 @@ jobs:
           chmod +x *.sh
           ./build_gojni.sh
 
-      - uses: actions/upload-artifact@v3.1.0
+      - uses: actions/upload-artifact@v4
         with:
           name: tts-server-lib
-          path: tts-server-lib/*.aar
+          path: lib-gojni/libs/*.aar
 
   build:
     needs: golib
@@ -49,10 +49,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: tts-server-lib
-          path: ${{ github.workspace }}/app/libs
+          path: ${{ github.workspace }}/lib-gojni/libs
 
       - uses: actions/setup-java@v3
         with:
