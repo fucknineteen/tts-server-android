@@ -16,17 +16,14 @@ jobs:
 
       - name: Build tts-server-lib
         run: |
-          cd tts-server-lib
-          go install golang.org/x/mobile/cmd/gomobile@latest
-          gomobile init
-          go get golang.org/x/mobile/bind
-          gomobile bind -ldflags "-s -w" -v -androidapi=19
-          cp -f *.aar $GITHUB_WORKSPACE/app/libs
+          cd $GITHUB_WORKSPACE/.github/scripts
+          chmod +x *.sh
+          ./build_gojni.sh
 
-      - uses: actions/upload-artifact@v3.1.0
+      - uses: actions/upload-artifact@v4
         with:
           name: tts-server-lib
-          path: tts-server-lib/*.aar
+          path: lib-gojni/libs/*.aar
 
   build:
     needs: go-lib
@@ -37,10 +34,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
             name: tts-server-lib
-            path: ${{ github.workspace }}/app/libs
+            path: ${{ github.workspace }}/lib-gojni/libs
 
       - uses: actions/setup-java@v3
         with:

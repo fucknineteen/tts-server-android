@@ -18,13 +18,14 @@ import com.github.jing332.tts_server_android.constant.AppConst
 import com.github.jing332.tts_server_android.constant.KeyConst
 import com.github.jing332.tts_server_android.ui.AppLog
 import com.github.jing332.tts_server_android.constant.LogLevel
+import com.github.jing332.lib_gojni.NativeUtils
+import com.github.jing332.lib_gojni.TtsGoNative
 import com.github.jing332.tts_server_android.ui.ImportConfigActivity
 import com.github.jing332.tts_server_android.utils.ClipboardUtils
 import com.github.jing332.tts_server_android.utils.registerGlobalReceiver
 import com.github.jing332.tts_server_android.utils.startForegroundCompat
 import com.github.jing332.tts_server_android.utils.toast
 import splitties.systemservices.powerManager
-import tts_server_lib.Tts_server_lib
 
 @Suppress("DEPRECATION")
 abstract class AbsForwarderService(
@@ -59,7 +60,7 @@ abstract class AbsForwarderService(
     private val mNotificationReceiver = NotificationActionReceiver()
 
     fun listenAddress(): String {
-        return Tts_server_lib.getOutboundIP() + ":" + port
+        return NativeUtils.getOutboundIP() + ":" + port
     }
 
     @SuppressLint("WakelockTimeout", "UnspecifiedRegisterReceiverFlag")

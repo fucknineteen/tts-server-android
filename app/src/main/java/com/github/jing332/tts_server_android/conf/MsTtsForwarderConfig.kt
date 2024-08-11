@@ -7,7 +7,21 @@ import com.github.jing332.tts_server_android.app
 object MsTtsForwarderConfig {
     private val pref = DataSaverPreferences(app.getSharedPreferences("server", 0))
 
-    val port = mutableDataSaverStateOf(pref, key = "port", 1233)
-    val isWakeLockEnabled = mutableDataSaverStateOf(pref, key = "isWakeLockEnabled", false)
-    val token = mutableDataSaverStateOf(pref, key = "token", "")
+    val port = mutableDataSaverStateOf(
+        dataSaverInterface = pref,
+        key = "port",
+        initialValue = 1233
+    )
+
+    val isWakeLockEnabled = mutableDataSaverStateOf(
+        dataSaverInterface = pref,
+        key = "isWakeLockEnabled",
+        initialValue = false
+    )
+
+    val token = mutableDataSaverStateOf(
+        dataSaverInterface = pref,
+        key = "token",
+        initialValue = "",
+    )
 }

@@ -11,7 +11,7 @@ import com.github.jing332.tts_server_android.constant.MsTtsApiType
 import com.github.jing332.tts_server_android.constant.MsTtsApiType.Companion.EDGE_OKHTTP
 import com.github.jing332.tts_server_android.data.entities.systts.AudioParams
 import com.github.jing332.tts_server_android.data.entities.systts.SpeechRuleInfo
-import com.github.jing332.tts_server_android.model.SysTtsLib
+import com.github.jing332.lib_gojni.TtsGoNative
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
@@ -121,8 +121,9 @@ data class MsTTS(
         // 500ms 内只可加载一次
         val currentTime = System.currentTimeMillis()
         if (currentTime - lastLoadTime > 500) {
-            SysTtsLib.setUseDnsLookup(true)
-            SysTtsLib.setTimeout(SystemTtsConfig.requestTimeout.value)
+            TtsGoNative.setTimeout(SystemTtsConfig.requestTimeout.value)
+            TtsGoNative.setUseDnsLookup(true)
+
             lastLoadTime = System.currentTimeMillis()
         }
     }
@@ -160,10 +161,13 @@ data class MsTTS(
                 format.ifBlank { "audio-24khz-48kbitrate-mono-mp3" })
         } else
             ByteArrayInputStream(
-                SysTtsLib.getAudio(
-                    speakText,
-                    this.copy(prosody = prosody.copy(rate = rate, pitch = pitch)),
-                    format
+                TtsGoNative.getAudio(
+                    text = speakText,
+                    voice = voiceName,
+                    rate = rate,
+                    pitch = pitch,
+                    volume = volume,
+                    format = format
                 )
             )
     }

@@ -1,13 +1,11 @@
 package com.github.jing332.tts_server_android.compose.codeeditor
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.drake.net.utils.withMain
+import com.github.jing332.lib_gojni.CodeSyncServer
 import com.github.jing332.tts_server_android.utils.runOnUI
 import kotlinx.coroutines.runBlocking
-import tts_server_lib.ScriptCodeSyncServerCallback
-import tts_server_lib.ScriptSyncServer
 
 class CodeEditorViewModel : ViewModel() {
     companion object {
@@ -16,7 +14,7 @@ class CodeEditorViewModel : ViewModel() {
         const val SYNC_ACTION_DEBUG = "debug"
     }
 
-    private var server: ScriptSyncServer? = null
+    private var server: CodeSyncServer? = null
 
     // 代码同步服务器
     fun startSyncServer(
@@ -27,38 +25,38 @@ class CodeEditorViewModel : ViewModel() {
         onAction: (name: String, body: ByteArray?) -> Unit
     ) {
         if (server != null) return
-        server = ScriptSyncServer()
-        server?.init(object : ScriptCodeSyncServerCallback {
-            override fun log(level: Int, msg: String?) {
+        server = CodeSyncServer()
+        server?.init(
+            onLog = { level, msg ->
                 Log.i(TAG, "$level $msg")
-            }
-
-            override fun action(name: String, body: ByteArray?) {
+            },
+            onAction = { name, body ->
                 runOnUI {
                     if (name == SYNC_ACTION_DEBUG) {
                         onDebug.invoke()
                     } else
                         onAction.invoke(name, body)
                 }
-            }
-
-            override fun pull(): String = runBlocking {
-                return@runBlocking withMain {
-                    return@withMain onPull.invoke()
+            },
+            onPull = {
+                runBlocking {
+                    return@runBlocking withMain {
+                        return@withMain onPull.invoke()
+                    }
                 }
-            }
-
-            override fun push(code: String) {
+            },
+            onPush = { code ->
                 runOnUI {
                     onPush.invoke(code)
                 }
             }
-        })
+        )
+
         server?.start(port.toLong())
     }
 
     private fun closeSyncServer() {
-        server?.close()
+        server?.shutdown()
         server = null
     }
 

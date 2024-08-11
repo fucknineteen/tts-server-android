@@ -5,6 +5,7 @@ import android.media.AudioFormat
 import android.media.AudioTrack
 import android.util.Log
 import com.github.jing332.tts_server_android.R
+import com.github.jing332.tts_server_android.conf.SysTtsConfig
 import com.github.jing332.tts_server_android.constant.AppPattern
 import com.github.jing332.tts_server_android.constant.ReplaceExecution
 import com.github.jing332.tts_server_android.constant.SpeechTarget
@@ -14,8 +15,6 @@ import com.github.jing332.tts_server_android.help.audio.AudioDecoder.Companion.r
 import com.github.jing332.tts_server_android.help.audio.ExoAudioPlayer
 import com.github.jing332.tts_server_android.help.audio.Sonic
 import com.github.jing332.tts_server_android.help.audio.exo.ExoAudioDecoder
-import com.github.jing332.tts_server_android.conf.SysTtsConfig
-import com.github.jing332.tts_server_android.model.SysTtsLib
 import com.github.jing332.tts_server_android.model.speech.ITextToSpeechSynthesizer
 import com.github.jing332.tts_server_android.model.speech.TtsTextSegment
 import com.github.jing332.tts_server_android.model.speech.tts.BaseAudioFormat
@@ -54,10 +53,6 @@ class TextToSpeechManager(val context: Context) : ITextToSpeechSynthesizer<IText
         private set
 
     private var audioFormat: BaseAudioFormat = BaseAudioFormat()
-
-    init {
-        SysTtsLib.setTimeout(SysTtsConfig.requestTimeout)
-    }
 
     private val mConfigMap: MutableMap<Int, List<ITextToSpeechEngine>> = mutableMapOf()
     private val mLoadedTtsMap = mutableSetOf<ITextToSpeechEngine>()
