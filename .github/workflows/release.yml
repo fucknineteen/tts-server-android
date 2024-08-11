@@ -21,12 +21,9 @@ jobs:
 
       - name: Build tts-server-lib
         run: |
-          cd tts-server-lib
-          go install golang.org/x/mobile/cmd/gomobile
-          gomobile init
-          go get golang.org/x/mobile/bind
-          gomobile bind -ldflags "-s -w" -v -androidapi=21
-          cp -f *.aar $GITHUB_WORKSPACE/app/libs
+          cd $$GITHUB_WORKSPACE/.github/scripts
+          chmod +x *.sh
+          ./build_gojni.sh
 
       - uses: actions/upload-artifact@v3.1.0
         with:
