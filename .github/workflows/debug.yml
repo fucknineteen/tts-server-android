@@ -16,7 +16,7 @@ jobs:
 
       - name: Build tts-server-lib
         run: |
-          cd $$GITHUB_WORKSPACE/.github/scripts
+          cd $GITHUB_WORKSPACE/.github/scripts
           chmod +x *.sh
           ./build_gojni.sh
 
